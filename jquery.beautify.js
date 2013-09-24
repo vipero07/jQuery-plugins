@@ -7,7 +7,8 @@
             $('input[type="range"]').each(function () {
                 var $self = $(this),
                     $slider = $(document.createElement('div')),
-                    pInt = parseInt;
+                    pInt = parseInt,
+                    $handle;
                 $slider.slider({
                     range: 'min',
                     value: pInt($self.val()) || 0,
@@ -15,13 +16,15 @@
                     max: pInt($self.attr('max')) || 100,
                     step: pInt($self.attr('step')) || 1,
                     slide: function (e, ui) {
-                        $self.val(ui.value);
+                        var val = ui.value;
+                        $self.val(val);
+                        $handle = $(ui.handle).text(val).css('width','auto');
+                    },
+                    stop: function (e, ui) {
+                        $handle.text('').css('width', '1.2em');
                     }
                 });
-                $self.attr('type', 'text')
-                    .change(function () {
-                        $slider.slider('value', $self.val());
-                    })
+                $self.attr('type', 'hidden')
                     .after($slider);
             });
         },

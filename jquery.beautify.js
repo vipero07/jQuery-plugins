@@ -18,8 +18,7 @@
                         $self.val(ui.value);
                     }
                 });
-                $self.val($slider.slider('value'))
-                    .attr('type', 'text')
+                $self.attr('type', 'text')
                     .change(function () {
                         $slider.slider('value', $self.val());
                     })

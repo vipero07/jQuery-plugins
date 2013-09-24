@@ -28,6 +28,9 @@
         beautifyAll = function(){
             beautifyRange();
         };
+        if(typeof(element) === 'string'){
+            element = element.toLowerCase();
+        }
         switch(element){
             case 'range':
                 beautifyRange();

@@ -59,8 +59,8 @@
             			{
             				text: settings.buttons.Ok,
             				click: function () {
-            					if ($.isFunction(callback)) {
-            						callback(params);
+            					if ($.isFunction(settings.callback)) {
+            						callback(settings.params);
             					}
             					confirmEle.dialog("close");
             				}

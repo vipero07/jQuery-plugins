@@ -29,16 +29,15 @@
         },
         beautifyConfirm = function(){
             window.confirm = function(message, options){
-            	/// <summary>overrides confirm with jquery ui with callback</summary>
+            	/// <summary>overrides confirm with jquery ui with callback ability</summary>
             	/// <param name="message" type=""></param>
             	/// <param name="options" type=""></param>
             	
             	//These are defaults
             	var settings = {
-            		title: 'Please Confirm',
+            		title: 'Confirm',
             		buttons: {Ok: 'OK', Cancel: 'Cancel'},
             		callback: false,
-            		params: false,
             		zIndex: 999
             	};
             	if(options){
@@ -47,8 +46,12 @@
             	
             	var confirmEle = $(document.createElement('div'))
             		.css({ display: 'none', 'z-index': settings.zIndex })
-            		.html(message);
+            		.html(message),
+            		callback = settings.callback,
+            		buttons = settings.buttons;
+            		
             	$('body').append(confirmEle);
+            	
             	confirmEle.dialog({
             		resizable: false,
             		title: settings.title,
@@ -57,16 +60,19 @@
             		width: 'auto',
             		buttons: [
             			{
-            				text: settings.buttons.Ok,
+            				text: buttons.Ok,
             				click: function () {
-            					if ($.isFunction(settings.callback)) {
-            						callback(settings.params);
+            					if (callback && $.isFunction(callback)) {
+            						callback(true);
             					}
             					confirmEle.dialog("close");
             				}
             			}, {
-            				text: settings.buttons.Cancel,
+            				text: buttons.Cancel,
             				click: function () {
+            				    if (callback && $.isFunction(callback)) {
+            						callback(false);
+            					}
             					confirmEle.dialog("close");
             				}
             			}
@@ -88,6 +94,9 @@
         switch(element){
             case 'range':
                 beautifyRange();
+                break;
+            case 'confirm':
+                beautifyConfirm();
                 break;
             default:
                 beautifyAll();

@@ -28,7 +28,7 @@
             });
         },
         beautifyConfirm = function(){
-            var window.confirm = function(message, options){
+            window.confirm = function(message, options){
             	/// <summary>overrides confirm with jquery ui with callback</summary>
             	/// <param name="message" type=""></param>
             	/// <param name="options" type=""></param>

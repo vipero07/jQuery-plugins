@@ -44,20 +44,20 @@
             		$.extend(settings,options);
             	}
             	
-            	var confirmEle = $(document.createElement('div'))
+            	var dialogEle = $(document.createElement('div'))
             		.css({ display: 'none', 'z-index': settings.zIndex })
             		.html(message),
             		callback = settings.callback,
             		buttons = settings.buttons;
             		
-            	$('body').append(confirmEle);
+            	$('body').append(dialogEle);
             	
-            	confirmEle.dialog({
+            	dialogEle.dialog({
             		resizable: false,
-            		title: settings.title,
             		modal: true,
             		height: 'auto',
             		width: 'auto',
+            		title: settings.title,
             		buttons: [
             			{
             				text: buttons.Ok,
@@ -65,7 +65,7 @@
             					if (callback && $.isFunction(callback)) {
             						callback(true);
             					}
-            					confirmEle.dialog("close");
+            					dialogEle.dialog("close");
             				}
             			}, {
             				text: buttons.Cancel,
@@ -73,7 +73,7 @@
             				    if (callback && $.isFunction(callback)) {
             						callback(false);
             					}
-            					confirmEle.dialog("close");
+            					dialogEle.dialog("close");
             				}
             			}
             		],
@@ -84,9 +84,59 @@
         	    });
             };
         },
+        beautifyAlert = function(){
+            window.alert = function(message, options){
+            	/// <summary>overrides alert with jquery ui with callback ability</summary>
+            	/// <param name="message" type=""></param>
+            	/// <param name="options" type=""></param>
+            	
+            	//These are defaults
+            	var settings = {
+            		title: 'Alert',
+            		buttons: {Ok: 'Close'},
+            		callback: false,
+            		zIndex: 999
+            	};
+            	if(options){
+            		$.extend(settings,options);
+            	}
+            	
+            	var dialogEle = $(document.createElement('div'))
+            		.css({ display: 'none', 'z-index': settings.zIndex })
+            		.html(message),
+            		callback = settings.callback,
+            		buttons = settings.buttons;
+            		
+            	$('body').append(dialogEle);
+            	
+            	dialogEle.dialog({
+            		resizable: false,
+            		modal: true,
+            		height: 'auto',
+            		width: 'auto',
+            		title: settings.title,
+            		buttons: [
+            			{
+            				text: buttons.Ok,
+            				click: function () {
+            					if (callback && $.isFunction(callback)) {
+            						callback(true);
+            					}
+            					dialogEle.dialog("close");
+            				}
+            			}
+            		],
+            		close: function () {
+            			dialogEle.remove();
+            			return false;
+            		}
+        	    });
+            };
+        },
         beautifyAll = function(){
             beautifyRange();
             beautifyConfirm();
+            beautifyAlert();
         };
         if(typeof(element) === 'string'){
             element = element.toLowerCase();
@@ -97,6 +147,9 @@
                 break;
             case 'confirm':
                 beautifyConfirm();
+                break;
+            case 'alert':
+                beautifyAlert();
                 break;
             default:
                 beautifyAll();

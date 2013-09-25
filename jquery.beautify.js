@@ -7,8 +7,7 @@
             $('input[type="range"]').each(function () {
                 var $self = $(this),
                     $slider = $(document.createElement('div')),
-                    pInt = parseInt,
-                    $handle;
+                    pInt = parseInt;
                 $slider.slider({
                     range: 'min',
                     value: pInt($self.val()) || 0,
@@ -18,18 +17,70 @@
                     slide: function (e, ui) {
                         var val = ui.value;
                         $self.val(val);
-                        $handle = $(ui.handle).text(val).css('width','auto');
+                        $(ui.handle).text(val).css('width','auto');
                     },
                     stop: function (e, ui) {
-                        $handle.text('').css('width', '1.2em');
+                        $(ui.handle).text('').css('width', '1.2em');
                     }
                 });
                 $self.attr('type', 'hidden')
                     .after($slider);
             });
         },
+        beautifyConfirm = function(){
+            var window.confirm = function(message, options){
+            	/// <summary>overrides confirm with jquery ui with callback</summary>
+            	/// <param name="message" type=""></param>
+            	/// <param name="options" type=""></param>
+            	
+            	//These are defaults
+            	var settings = {
+            		title: 'Please Confirm',
+            		buttons: {Ok: 'OK', Cancel: 'Cancel'},
+            		callback: false,
+            		params: false,
+            		zIndex: 999
+            	};
+            	if(options){
+            		$.extend(settings,options);
+            	}
+            	
+            	var confirmEle = $(document.createElement('div'))
+            		.css({ display: 'none', 'z-index': settings.zIndex })
+            		.html(message);
+            	$('body').append(confirmEle);
+            	confirmEle.dialog({
+            		resizable: false,
+            		title: settings.title,
+            		modal: true,
+            		height: 'auto',
+            		width: 'auto',
+            		buttons: [
+            			{
+            				text: settings.buttons.Ok,
+            				click: function () {
+            					if ($.isFunction(callback)) {
+            						callback(params);
+            					}
+            					confirmEle.dialog("close");
+            				}
+            			}, {
+            				text: settings.buttons.Cancel,
+            				click: function () {
+            					confirmEle.dialog("close");
+            				}
+            			}
+            		],
+            		close: function () {
+            			confirmEle.remove();
+            			return false;
+            		}
+        	    });
+            };
+        },
         beautifyAll = function(){
             beautifyRange();
+            beautifyConfirm();
         };
         if(typeof(element) === 'string'){
             element = element.toLowerCase();

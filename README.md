@@ -25,7 +25,6 @@ Confirm:
 });`
 
 Alert:
-Confirm:
 `$(function () {
     $.beautify('alert');
     alert("This is a confirm example", {title:"Example",buttons:{Ok:"Yes"}});

@@ -78,7 +78,7 @@
             			}
             		],
             		close: function () {
-            			confirmEle.remove();
+            			dialogEle.remove();
             			return false;
             		}
         	    });

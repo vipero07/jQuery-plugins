@@ -28,60 +28,64 @@
             });
         },
         beautifyConfirm = function(){
-            window.confirm = function(message, options){
-            	/// <summary>overrides confirm with jquery ui with callback ability</summary>
-            	/// <param name="message" type=""></param>
-            	/// <param name="options" type=""></param>
-            	
-            	//These are defaults
-            	var settings = {
-            		title: 'Confirm',
-            		buttons: {Ok: 'OK', Cancel: 'Cancel'},
-            		callback: false,
-            		zIndex: 999
-            	};
-            	if(options){
-            		$.extend(settings,options);
-            	}
-            	
-            	var dialogEle = $(document.createElement('div'))
-            		.css({ display: 'none', 'z-index': settings.zIndex })
-            		.html(message),
-            		callback = settings.callback,
-            		buttons = settings.buttons;
-            		
-            	$('body').append(dialogEle);
-            	
-            	dialogEle.dialog({
-            		resizable: false,
-            		modal: true,
-            		height: 'auto',
-            		width: 'auto',
-            		title: settings.title,
-            		buttons: [
-            			{
-            				text: buttons.Ok,
-            				click: function () {
-            					if (callback && $.isFunction(callback)) {
-            						callback(true);
-            					}
-            					dialogEle.dialog("close");
-            				}
-            			}, {
-            				text: buttons.Cancel,
-            				click: function () {
-            				    if (callback && $.isFunction(callback)) {
-            						callback(false);
-            					}
-            					dialogEle.dialog("close");
-            				}
-            			}
-            		],
-            		close: function () {
-            			dialogEle.remove();
-            			return false;
-            		}
-        	    });
+            window.confirm = function (message, options) {
+                /// <summary>overrides confirm with jquery ui with callback ability</summary>
+                /// <param name="message" type=""></param>
+                /// <param name="options" type=""></param>
+            
+                //These are defaults
+                var settings = {
+                    title: 'Confirm',
+                    buttons: { Ok: 'OK', Cancel: 'Cancel' },
+                    callback: false,
+                    zIndex: 999,
+                    dialogSettings: false
+                };
+                if (options) {
+                    $.extend(settings, options);
+                }
+            
+                var dialogEle = $(document.createElement('div'))
+                    .css({ display: 'none', 'z-index': settings.zIndex })
+                    .html(message),
+                    callback = settings.callback,
+                    buttons = settings.buttons,
+                    dialogSettings = {
+                        resizable: false,
+                        modal: true,
+                        height: 'auto',
+                        width: 'auto',
+                        title: settings.title,
+                        buttons: [
+                            {
+                                text: buttons.Cancel,
+                                click: function () {
+                                    if (callback && $.isFunction(callback)) {
+                                        callback(false);
+                                    }
+                                    dialogEle.dialog("close");
+                                }
+                            }, {
+                                text: buttons.Ok,
+                                click: function () {
+                                    if (callback && $.isFunction(callback)) {
+                                        callback(true);
+                                    }
+                                    dialogEle.dialog("close");
+                                }
+                            }
+                        ],
+                        close: function () {
+                            dialogEle.remove();
+                            return false;
+                        }
+                    };
+                if (settings.dialogSettings) {
+                    $.extend(dialogSettings, settings.dialogSettings);
+                }
+                $('body').append(dialogEle);
+                dialogEle.dialog(dialogSettings);
+                return dialogEle;
             };
         },
         beautifyAlert = function(){

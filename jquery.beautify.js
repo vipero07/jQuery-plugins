@@ -3,7 +3,8 @@
         /// <summary>Makes all elements of set type look the same, and use jqueryui</summary>
         /// <param name="element" type="String">range is the only accepted "element" right now</param>
         /// <returns type="Boolean"></returns>
-        var beautifyRange = function () {
+        var $body = $('body'),
+        beautifyRange = function () {
             $('input[type="range"]').each(function () {
                 var $self = $(this),
                     $slider = $(document.createElement('div')),
@@ -41,7 +42,7 @@
                     zIndex: 999,
                     dialogSettings: false
                 };
-                if (options) {
+                if ($.isPlainObject(options)) {
                     $.extend(settings, options);
                 }
             
@@ -83,7 +84,7 @@
                 if (settings.dialogSettings) {
                     $.extend(dialogSettings, settings.dialogSettings);
                 }
-                $('body').append(dialogEle);
+                $body.append(dialogEle);
                 dialogEle.dialog(dialogSettings);
                 return dialogEle;
             };
@@ -101,7 +102,7 @@
             		callback: false,
             		zIndex: 999
             	};
-            	if(options){
+            	if($.isPlainObject(options)){
             		$.extend(settings,options);
             	}
             	
@@ -111,7 +112,7 @@
             		callback = settings.callback,
             		buttons = settings.buttons;
             		
-            	$('body').append(dialogEle);
+            	$body.append(dialogEle);
             	
             	dialogEle.dialog({
             		resizable: false,
@@ -142,7 +143,7 @@
             beautifyConfirm();
             beautifyAlert();
         };
-        if(typeof(element) === 'string'){
+        if($.type(element) === 'string'){
             element = element.toLowerCase();
         }
         switch(element){

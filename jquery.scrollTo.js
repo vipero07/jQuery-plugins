@@ -14,7 +14,7 @@
 			settings.duration = options;
 		}
 		$('html, body').animate({
-			scrollTop: offsets.top
+			scrollTop: offsets.top,
 			scrollLeft: offsets.left
 		}, settings.duration);
 		if(settings.focus){

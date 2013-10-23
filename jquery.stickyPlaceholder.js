@@ -5,9 +5,15 @@
         var label = $(this).data('label');
 
         if (event && event.type === 'focusin') {
-            label.css('opacity', options.placeholderFocusOpacity);
+            label.css({
+                'opacity': options.placeholderFocusOpacity,
+                'filter': "alpha(opacity=" + (options.placeholderFocusOpacity * 100) + ")"
+            });
         } else if (event && event.type === 'focusout') {
-            label.css('opacity', options.placeholderOpacity);
+            label.css({
+                'opacity': options.placeholderOpacity,
+                'filter': "alpha(opacity=" + (options.placeholderOpacity * 100) + ")"
+            });
         }
 
         if (event && event.type !== 'keydown') {
@@ -34,7 +40,6 @@
     $.fn.stickyPlaceholders = function (options) {
         var defaults = {
             wrapperClass: 'sticky-placeholder-wrapper',
-            wrapperDisplay: 'block',
             labelClass: 'sticky-placeholder-label',
             placeholderAttr: 'placeholder',
             dataAttr: 'data-sticky-placeholder',
@@ -45,53 +50,45 @@
         options = $.extend(defaults, options);
 
         return this.each(function () {
-            var input = $(this),
-                placeholder = input.attr(options.placeholderAttr),
-                wrapper = $(this).wrap('<span class="' + options.wrapperClass + '" />').parent().css({ 'position': 'relative', 'display': options.wrapperDisplay }),
-                label = $('<label class="' + options.labelClass + '" for="' + input.attr('id') + '">' + placeholder + '</label>').appendTo(wrapper),
-                labelStyle;
+            var self = this,
+                $input = $(self),
+                placeholder = $input.attr(options.placeholderAttr),
+                wrapper = $(document.createElement('span')).addClass(options.wrapperClass),
+                label = $(document.createElement('label')).attr({ 'class': options.labelClass, 'for': $input.attr('id') })
+                    .text(placeholder)
+                    .css($.extend(
+                        {
+                            'color': options.placeholderColor,
+                            'opacity': options.placeholderOpacity,
+                            'filter': "alpha(opacity=" + (options.placeholderOpacity * 100) + ")",
+                            'margin': (parseInt($input.css('border-top-width'), 10) + parseInt($input.css('margin-top'), 10)) + 'px ' +
+                                (parseInt($input.css('border-left-width'), 10) + parseInt($input.css('margin-left'), 10)) + 'px ' +
+                                0 + ' ' +
+                                (parseInt($input.css('border-right-width'), 10) + parseInt($input.css('margin-right'), 10)) + 'px ',
+                            'line-height': self.currentStyle ? self.currentStyle.lineHeight : $input.css('line-height')
+                        },
+                        $input.css(['font-family', 'font-weight', 'font-size', 'padding-top', 'padding-left', 'padding-right', 'text-transform', 'width', 'height'])
+                    ));
 
-            // store a reference to each input's label
-            input.data('label', label);
-
-            // remove the placeholder attribute to avoid conflcits
-            input.removeAttr('placeholder');
+            $input.wrap(wrapper).after(label)
+                .data('label', label) // store a reference to each input's label
+                .removeAttr('placeholder'); // remove the placeholder attribute to avoid conflcits
 
             // If the dataAttr is set and it's not equal to the placeholderAttr
             if (options.dataAttr && options.placeholderAttr !== options.dataAttr) {
-                input.attr('data-sticky-placeholder', placeholder);
+                $input.attr(options.dataAttr, placeholder);
             }
 
-            labelStyle = {
-                'color': options.placeholderColor,
-                'font-family': input.css('font-family'),
-                'font-weight': input.css('font-weight'),
-                'font-size': input.css('font-size'),
-                'left': parseInt(input.css('border-left-width'), 10) + parseInt(input.css('margin-left'), 10),
-                'line-height': this.currentStyle ? this.currentStyle.lineHeight : input.css('line-height'),
-                // fix for an IE/jQuery bug returning 1px when the line-height doesn't have a unit: http://bugs.jquery.com/ticket/2671
-                'opacity': options.placeholderOpacity,
-                'filter': "alpha(opacity=" + (options.placeholderOpacity*100) + ")",
-                'padding': input.css('padding'), //fixes for keeping text in the box
-                'padding-bottom': 0,
-                'text-transform': input.css('text-transform'),
-                'top': parseInt(input.css('border-top-width'), 10) + parseInt(input.css('margin-top'), 10),
-                'width': input.css('width'), //keeps text in box
-                'height': input.css('height') //keeps text in box
-            };
-            label.css(labelStyle);
-
-            //IE FIX for dynamically inserted textareas
-            if (input.val() == placeholder) {
-                input.val("");
-            }
-            // hide the placeholder if the input already has a value
-            if (input.val()) {
+            //IE FIX
+            if ($input.val() == placeholder) {
+                $input.val("");
+            } else if ($input.val()) {
+                // hide the placeholder if the input already has a value
                 label.hide();
             }
 
-            $(this).bind('keydown input focusin focusout', function (event) {
-                alterParent.call(this, options, event);
+            $input.bind('keydown input focusin focusout', function (event) {
+                alterParent.call(self, options, event);
             });
 
             // prevent click/dblclick from selecting the label text
@@ -100,7 +97,7 @@
             });
 
             // call alterParent initially without an event to set up the wrapper elements
-            alterParent.call(this, options);
+            alterParent.call(self, options);
         });
     };
 })(jQuery);

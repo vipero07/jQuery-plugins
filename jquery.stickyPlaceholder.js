@@ -79,7 +79,7 @@
                                 getPaddingPx($input, 'left'),
                             'line-height': self.currentStyle ? self.currentStyle.lineHeight : $input.css('line-height')
                         },
-                        $input.css(['font-family', 'font-weight', 'font-size', 'text-transform', 'width', 'height'])
+                        $input.css(['font-family', 'font-weight', 'font-size', 'width', 'height'])
                     ));
 
             $input.wrap(wrapper).before(label)

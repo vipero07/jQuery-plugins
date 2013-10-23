@@ -36,6 +36,18 @@
             label.show();
         }
     };
+    
+    var addArray = function (obj) {
+        var total = 0;
+        $.each(obj, function(prop, val) {
+            total += parseInt(val, 10);
+        });
+        return total;
+    };
+    
+    var getPaddingPx = function (element, direction) {
+        return addArray($(element).css(['border-' + direction + '-width', 'margin-' + direction, 'padding-' + direction])) + 'px ';
+    };
 
     $.fn.stickyPlaceholders = function (options) {
         var defaults = {
@@ -61,16 +73,16 @@
                             'color': options.placeholderColor,
                             'opacity': options.placeholderOpacity,
                             'filter': "alpha(opacity=" + (options.placeholderOpacity * 100) + ")",
-                            'margin': (parseInt($input.css('border-top-width'), 10) + parseInt($input.css('margin-top'), 10)) + 'px ' +
-                                (parseInt($input.css('border-left-width'), 10) + parseInt($input.css('margin-left'), 10)) + 'px ' +
+                            'padding': getPaddingPx($input, 'top') +
+                                getPaddingPx($input, 'right') +
                                 0 + ' ' +
-                                (parseInt($input.css('border-right-width'), 10) + parseInt($input.css('margin-right'), 10)) + 'px ',
+                                getPaddingPx($input, 'left'),
                             'line-height': self.currentStyle ? self.currentStyle.lineHeight : $input.css('line-height')
                         },
-                        $input.css(['font-family', 'font-weight', 'font-size', 'padding-top', 'padding-left', 'padding-right', 'text-transform', 'width', 'height'])
+                        $input.css(['font-family', 'font-weight', 'font-size', 'text-transform', 'width', 'height'])
                     ));
 
-            $input.wrap(wrapper).after(label)
+            $input.wrap(wrapper).before(label)
                 .data('label', label) // store a reference to each input's label
                 .removeAttr('placeholder'); // remove the placeholder attribute to avoid conflcits
 

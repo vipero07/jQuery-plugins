@@ -1,0 +1,32 @@
+.formContainer .uploadProgress {
+    display: none;
+}
+.sticky-placeholder-wrapper {
+    position: relative;
+    display: inline-block;
+}
+    .sticky-placeholder-wrapper > label {
+        -webkit-transition: opacity .2s ease-out;
+        -moz-transition: opacity .2s ease-out;
+        -ms-transition: opacity .2s ease-out;
+        -o-transition: opacity .2s ease-out;
+        transition: opacity .2s ease-out;
+        text-transform: none;
+        cursor: text;
+        position: absolute;
+        overflow: hidden;
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-bottom: 0;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        left: 0;
+        top: 0;
+    }
+fieldset > ol {
+    list-style-type: none;
+    padding: 0;
+}

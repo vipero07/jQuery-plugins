@@ -66,7 +66,7 @@
                 $input = $(self),
                 placeholder = $input.attr(options.placeholderAttr),
                 wrapper = $(document.createElement('span')).addClass(options.wrapperClass),
-                label = $(document.createElement('label')).attr({ 'class': options.labelClass, 'for': $input.attr('id') })
+                label = $(document.createElement('label')).attr({ 'class': options.labelClass, 'for': $input.attr('id'), 'title': $input.attr('title') })
                     .text(placeholder)
                     .css($.extend(
                         {
@@ -85,7 +85,7 @@
             $input.wrap(wrapper).before(label)
                 .data('label', label) // store a reference to each input's label
                 .removeAttr('placeholder'); // remove the placeholder attribute to avoid conflcits
-
+                
             // If the dataAttr is set and it's not equal to the placeholderAttr
             if (options.dataAttr && options.placeholderAttr !== options.dataAttr) {
                 $input.attr(options.dataAttr, placeholder);

@@ -37,7 +37,7 @@
         }
     };
     
-    var addArray = function (obj) {
+    var addValues = function (obj) {
         var total = 0;
         $.each(obj, function(prop, val) {
             total += parseInt(val, 10);
@@ -46,7 +46,7 @@
     };
     
     var getPaddingPx = function (element, direction) {
-        return addArray($(element).css(['border-' + direction + '-width', 'margin-' + direction, 'padding-' + direction])) + 'px ';
+        return addValues($(element).css(['border-' + direction + '-width', 'margin-' + direction, 'padding-' + direction])) + 'px ';
     };
 
     $.fn.stickyPlaceholders = function (options) {

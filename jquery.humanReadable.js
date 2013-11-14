@@ -11,7 +11,7 @@
           } else {
               var s = ' kMBTPEZY',
                   e = Math.floor(Math.log(number) / Math.log(kilo));
-              retValue = Number((number / Math.pow(kilo, e)).toString().substring(0, 3)) + s.charAt(e);
+              retValue = Number((number / Math.pow(kilo, e)).toString().slice(0, 3)) + s.charAt(e);
           }
       }
       return retValue;

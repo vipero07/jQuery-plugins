@@ -20,9 +20,8 @@
                 self.down = self.current > self.last;
                 self.up = self.current < self.last;
             }
-        };
-
-        setInterval(function () {
+        },
+        scrollDirection = function () {
             //check if the window scrolled
             if (didScroll) {
                 scrolled.update();
@@ -38,6 +37,11 @@
                 //TODO: save current page "location" in history //http://blog.gesteves.com/2011/09/22/better-infinite-scrolling-with-the-html5-history-api/
                 didScroll = false;
             }
-        }, 150);
+            //call yourself again
+            setTimeout(scrollDirection, 150);
+        };
+
+        //initialize scroll
+        setTimeout(scrollDirection, 0);
     };
 })(jQuery);

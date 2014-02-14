@@ -1,6 +1,6 @@
 (function ($){
 	if(!$.globalTimeout){
-		var defaults = { rate: 200, max: false, name: "timeout" },
+		var defaults = { rate: 200, max: false, name: "timeout", clear = false },
 		timeoutVar = [], $window = $(window), total, clear = false;
 		
 		$.globalTimeout = function(options){
@@ -13,7 +13,7 @@
 			}
 			
 			total = 0;
-			if(clear){
+			if(clear || defaults.clear){
 				clearTimeout(timeoutVar[defaults.name]);
 				clear = false;
 			}else{

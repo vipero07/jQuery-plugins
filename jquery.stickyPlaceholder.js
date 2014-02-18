@@ -21,11 +21,9 @@
         } else {
             // Use timeout to catch val() just after the key is pressed
             // Using keyup is too slow.   
-            (function (input) {
-                setTimeout(function () {
-                    toggleLabel(input, label);
-                }, 0);
-            })(this);
+            setTimeout(function () {
+                toggleLabel(input, label);
+            }, 0);
         }
     };
 
@@ -100,7 +98,12 @@
                     // hide the placeholder if the input already has a value (autofilled)
                     label.hide();
                 }
-            }, 50);
+            }, 100);
+            
+            label.on('mousedown mouseup focus', function (e) {
+                $input.trigger(e.type);
+                return false;
+            });
 
             $input.bind('keydown input focusin focusout', function (event) {
                 alterParent.call(self, options, event);

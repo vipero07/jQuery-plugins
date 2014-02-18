@@ -91,21 +91,19 @@
                 $input.attr(options.dataAttr, placeholder);
             }
 
-            //IE FIX
-            if ($input.val() == placeholder) {
-                $input.val("");
-            } else if ($input.val()) {
-                // hide the placeholder if the input already has a value
-                label.hide();
-            }
+           //IE FIX and autofill fix
+            setTimeout(function () {
+                var inVal = $input.val();
+                if (inVal == placeholder) {
+                    $input.val("");
+                } else if (inVal) {
+                    // hide the placeholder if the input already has a value (autofilled)
+                    label.hide();
+                }
+            }, 50);
 
             $input.bind('keydown input focusin focusout', function (event) {
                 alterParent.call(self, options, event);
-            });
-
-            // prevent click/dblclick from selecting the label text
-            label.bind('mousedown', function (e) {
-                e.preventDefault();
             });
 
             // call alterParent initially without an event to set up the wrapper elements

@@ -21,9 +21,11 @@
         } else {
             // Use timeout to catch val() just after the key is pressed
             // Using keyup is too slow.   
-            setTimeout(function () {
-                toggleLabel(input, label);
-            }, 0);
+            (function (input) {
+                setTimeout(function () {
+                    toggleLabel(input, label);
+                }, 0);
+            })(this);
         }
     };
 

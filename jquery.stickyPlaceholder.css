@@ -25,6 +25,11 @@
         box-sizing: border-box;
         left: 0;
         top: 0;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -o-user-select: none;
+        user-select: none;
     }
 fieldset > ol {
     list-style-type: none;

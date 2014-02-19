@@ -3,7 +3,7 @@
 		$.tarString = function(str, len){
 		//take len characters out of a string and "tar" them
 			if(str.length > len){
-				var startPos = ~~((Math.random() * (str.length - len))),
+				var startPos = ((Math.random() * (str.length - len))) | 0,
 					endPos = startPos + len + 1;
 					str = str.substring(startPos, endPos);
 			}
@@ -30,7 +30,7 @@
 				result = true;
 			}
 			//default randomize len between 10 and 20 characters if not set
-			len = typeof len == 'number' ? len : ~~(Math.random() * 11) + 10;
+			len = typeof len == 'number' ? len : (Math.random() * 11) | 0 + 10;
 			//always tar post so the random section being compared differs each time.
 			$.tarString(str, len);
 			return result;

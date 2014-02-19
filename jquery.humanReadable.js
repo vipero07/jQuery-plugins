@@ -9,7 +9,7 @@
           if (number < kilo) {
               retValue = number.toString();
           } else {
-              var e = Math.floor(Math.log(number) / Math.log(kilo));
+              var e = (Math.log(number) / Math.log(kilo)) | 0;
               retValue = Number((number / Math.pow(kilo, e)).toString().slice(0, 3)) + suffix.charAt(e);
           }
       }

@@ -82,7 +82,7 @@
                     ));
 
             $input.wrap(wrapper) //wrap with span
-                .before(label) //attach label (before or after input, doesn't matter)
+                .after(label) //attach label after input
                 .css({ 'background-color': 'transparent' }) //remove background
                 .data('label', label) // store a reference to each input's label
                 .removeAttr(options.placeholderAttr); // remove the placeholder attribute to avoid conflcits

@@ -60,27 +60,37 @@
         return this.each(function () {
             var self = this,
                 $input = $(self),
-                placeholder = $input.attr(options.placeholderAttr),
-                wrapper = $(document.createElement('span')).addClass(options.wrapperClass).css($input.css(['margin', 'background', 'border-radius'])),
-                label = $(document.createElement('label')).attr({ 'class': options.labelClass, 'for': $input.attr('id'), 'title': $input.attr('title') })
-                    .text(placeholder)
+                ieStyle = self.currentStyle ? self.currentStyle : false,
+                placeholder = $input.attr(options.placeholderAttr), //get the placeholder text
+                wrapper = $(document.createElement('span')) //make a span to wrap around the input and new label
+                    .addClass(options.wrapperClass) //add the class
+                    .css({
+                        'margin': ieStyle ? ieStyle.margin : $input.css('margin'),
+                        'background-color': ieStyle ? ieStyle.backgroundColor : $input.css('background-color'),
+                        'border-radius': ieStyle ? ieStyle.borderRadius : $input.css('border-radius')
+                    }), //copy the input's margin background and radius
+                label = $(document.createElement('label')) //make the label
+                    .attr({ 'class': options.labelClass, 'for': $input.attr('id') }) //copy the inputs id to labels for
+                    .text(placeholder) //put the placeholder text into the text of the label
                     .css($.extend(
                         {
-                            'color': options.placeholderColor,
-                            'opacity': options.placeholderOpacity,
-                            'filter': "alpha(opacity=" + (options.placeholderOpacity * 100) + ")",
+                            //'color': options.placeholderColor,
+                            //'opacity': options.placeholderOpacity,
+                            //'filter': "alpha(opacity=" + (options.placeholderOpacity * 100) + ")",
                             'padding': getPaddingPx($input, 'top') +
                                 getPaddingPx($input, 'right') +
                                 0 + ' ' +
                                 getPaddingPx($input, 'left'),
-                            'line-height': self.currentStyle ? self.currentStyle.lineHeight : $input.css('line-height')
+                            'line-height': ieStyle ? ieStyle.lineHeight : $input.css('line-height')
                         },
                         $input.css(['font-family', 'font-weight', 'font-size'])
                     ));
 
-            $input.wrap(wrapper).before(label).css({'background': 'none'})
+            $input.wrap(wrapper) //wrap with span
+                .before(label) //attach label (before or after input, doesn't matter)
+                .css({ 'background-color': 'transparent' }) //remove background
                 .data('label', label) // store a reference to each input's label
-                .removeAttr('placeholder'); // remove the placeholder attribute to avoid conflcits
+                .removeAttr(options.placeholderAttr); // remove the placeholder attribute to avoid conflcits
 
             // If the dataAttr is set and it's not equal to the placeholderAttr
             if (options.dataAttr && options.placeholderAttr !== options.dataAttr) {

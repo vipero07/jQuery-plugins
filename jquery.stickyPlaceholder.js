@@ -64,11 +64,11 @@
                 placeholder = $input.attr(options.placeholderAttr), //get the placeholder text
                 wrapper = $(document.createElement('span')) //make a span to wrap around the input and new label
                     .addClass(options.wrapperClass) //add the class
-                    .css({
-                        'margin': ieStyle ? ieStyle.margin : $input.css('margin'),
-                        'background-color': ieStyle ? ieStyle.backgroundColor : $input.css('background-color'),
-                        'border-radius': ieStyle ? ieStyle.borderRadius : $input.css('border-radius')
-                    }), //copy the input's margin background and radius
+                    .css(ieStyle ? {
+                        'margin': ieStyle.margin,
+                        'background-color': ieStyle.backgroundColor,
+                        'border-radius': ieStyle.borderRadius
+                    } : $input.css(['margin', 'background-color', 'border-radius'])), //copy the input's margin background and radius
                 label = $(document.createElement('label')) //make the label
                     .attr({ 'class': options.labelClass, 'for': $input.attr('id') }) //copy the inputs id to labels for
                     .text(placeholder) //put the placeholder text into the text of the label

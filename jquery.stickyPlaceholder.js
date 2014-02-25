@@ -15,25 +15,21 @@
                 'filter': "alpha(opacity=" + (options.placeholderOpacity * 100) + ")"
             });
         }
-
-        if (event && event.type !== 'keydown') {
-            toggleLabel(this, label);
-        } else {
-            // Use timeout to catch val() just after the key is pressed
-            // Using keyup is too slow.   
-            (function (input) {
-                setTimeout(function () {
-                    toggleLabel(input, label);
-                }, 0);
-            })(this);
-        }
+        
+        // Use timeout to catch val() just after the key is pressed or after change occurs
+        // Using keyup is too slow.   
+        (function (input) {
+            setTimeout(function () {
+                toggleLabel(input, label);
+            }, 0);
+        })(this);
     };
 
     var toggleLabel = function (input, label) {
         if ($(input).val()) {
-            label.hide();
+            label.stop().hide();
         } else {
-            label.show();
+            label.stop().show();
         }
     };
     
@@ -65,7 +61,7 @@
             var self = this,
                 $input = $(self),
                 placeholder = $input.attr(options.placeholderAttr),
-                wrapper = $(document.createElement('span')).addClass(options.wrapperClass),
+                wrapper = $(document.createElement('span')).addClass(options.wrapperClass).css($input.css(['margin', 'background', 'border-radius'])),
                 label = $(document.createElement('label')).attr({ 'class': options.labelClass, 'for': $input.attr('id'), 'title': $input.attr('title') })
                     .text(placeholder)
                     .css($.extend(
@@ -79,19 +75,19 @@
                                 getPaddingPx($input, 'left'),
                             'line-height': self.currentStyle ? self.currentStyle.lineHeight : $input.css('line-height')
                         },
-                        $input.css(['font-family', 'font-weight', 'font-size', 'width', 'height'])
+                        $input.css(['font-family', 'font-weight', 'font-size'])
                     ));
 
-            $input.wrap(wrapper).before(label)
+            $input.wrap(wrapper).before(label).css({'background': 'none'})
                 .data('label', label) // store a reference to each input's label
                 .removeAttr('placeholder'); // remove the placeholder attribute to avoid conflcits
-                
+
             // If the dataAttr is set and it's not equal to the placeholderAttr
             if (options.dataAttr && options.placeholderAttr !== options.dataAttr) {
                 $input.attr(options.dataAttr, placeholder);
             }
 
-           //IE FIX and autofill fix
+            //IE FIX and autofill fix
             setTimeout(function () {
                 var inVal = $input.val();
                 if (inVal == placeholder) {
@@ -101,13 +97,8 @@
                     label.hide();
                 }
             }, 100);
-            
-            label.on('mousedown mouseup focus', function (e) {
-                $input.trigger(e.type);
-                return false;
-            });
 
-            $input.bind('keydown input focusin focusout', function (event) {
+            $input.on('keydown input focusin focusout paste change', function (event) {
                 alterParent.call(self, options, event);
             });
 
